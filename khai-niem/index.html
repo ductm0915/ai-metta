@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10 khái niệm nền của AIOS — giải thích kiểu Feynman</title>
+<meta name="description" content="Hiểu 10 từ khoá của một hệ điều hành AI cá nhân (AIOS) bằng một bức tranh duy nhất: nhân viên mất trí nhớ, mặt bàn, và những tờ giấy.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0f172a; --blue:#2563eb; --blued:#1e40af; --amber:#f59e0b; --green:#16a34a;
+    --red:#ef4444; --slate:#64748b; --bg:#ffffff; --soft:#f6f8fc; --line:#e6ebf3; --mut:#64748b; --sky:#eff6ff;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;font-size:16px}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px}
+  h1,h2,h3{font-family:'Montserrat',sans-serif}
+  .mono{font-family:'Roboto Mono',monospace}
+
+  /* hero */
+  .hero{position:relative;background:radial-gradient(120% 120% at 50% 0%,#1e3a8a 0%,#0f172a 72%);color:#fff;text-align:center;padding:70px 0 66px}
+  .brandlogo{position:absolute;top:20px;left:22px;height:40px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+  .hero .tag{font-family:'Roboto Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#93c5fd}
+  .hero h1{font-size:46px;font-weight:800;letter-spacing:-.02em;margin:14px 0 12px;line-height:1.08}
+  .hero p{font-size:19px;color:#cbd5e1;max-width:680px;margin:0 auto 26px}
+  .hero .one{font-size:20px;color:#fff;background:rgba(255,255,255,.07);border:1px solid rgba(147,197,253,.32);border-radius:14px;padding:18px 24px;max-width:760px;margin:0 auto;font-weight:500;line-height:1.5}
+  .hero .one b{color:#93c5fd;font-weight:700}
+  .hero .heronote{font-size:14px;color:#93a3b8;max-width:640px;margin:20px auto 0;line-height:1.55}
+
+  /* sections */
+  section{padding:56px 0;border-bottom:1px solid var(--line)}
+  section.alt{background:var(--soft)}
+  .eyebrow{font-family:'Roboto Mono',monospace;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);font-weight:500;margin-bottom:8px}
+  h2{font-size:30px;font-weight:800;letter-spacing:-.02em;margin:0 0 8px;line-height:1.14}
+  .sub{font-size:17px;color:var(--mut);max-width:720px;margin:0 0 8px}
+  .center{text-align:center}
+  .center .sub{margin-left:auto;margin-right:auto}
+
+  /* the shift: 3 tight rows */
+  .shift{max-width:840px;margin:26px auto 0}
+  .srow{display:grid;grid-template-columns:1fr 40px 1fr;align-items:center;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+  .srow:last-child{border-bottom:1px solid var(--line)}
+  .sold,.snew{font-size:15.5px;line-height:1.4}
+  .sold{color:#9aa4b2;text-align:right}
+  .snew{color:var(--ink);font-weight:600}
+  .sarr{color:var(--blue);font-size:22px;text-align:center;font-weight:700}
+  @media(max-width:720px){.srow{grid-template-columns:1fr;gap:2px;text-align:left}.sold{text-align:left}.sarr{display:none}}
+
+  /* global paste note */
+  .pnote{background:var(--sky);border:1px solid #bfdbfe;border-radius:12px;padding:14px 18px;font-size:15px;color:#1e3a8a;max-width:760px;margin:0 auto 30px}
+  .pnote b{color:var(--blued)}
+
+  /* tip cards */
+  .tips{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .tip{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px 22px 20px;box-shadow:0 3px 14px rgba(15,23,42,.05);display:flex;flex-direction:column}
+  .tiphead{display:flex;gap:14px;align-items:center;margin-bottom:12px}
+  .rk{flex:none;width:42px;height:42px;border-radius:12px;background:#1e3a8a;color:#fff;font-family:'Montserrat';font-weight:800;font-size:19px;display:flex;align-items:center;justify-content:center}
+  .tip h3{font-size:18px;margin:0;font-weight:800;line-height:1.15;letter-spacing:-.01em}
+  .kicker{font-family:'Roboto Mono';font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--blue);margin-top:3px}
+  .aha{font-size:15px;color:#334155;margin:0 0 16px;line-height:1.5}
+  .aha b{color:var(--ink)}
+  .gtag{margin-left:auto;flex:none;align-self:flex-start;font-family:'Roboto Mono';font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:20px;font-weight:500;white-space:nowrap}
+  .gtag.univ{background:#eef2f7;color:#475569;border:1px solid #d8e0ea}
+  .gtag.fable{background:#fef3c7;color:#92400e;border:1px solid #fde68a}
+  .ppara{font-size:12.5px;color:#1e40af;background:#eff6ff;border:1px solid #dbeafe;border-radius:9px;padding:8px 11px;margin:0 0 14px;line-height:1.45}
+  .ba{margin-top:auto;display:flex;flex-direction:column;gap:9px}
+  .bad,.paste{border-radius:11px;padding:11px 13px;font-size:13px;line-height:1.5}
+  .bad{background:#fef2f2;color:#7f1d1d}
+  .paste{background:#0f172a;color:#e6edf6;font-family:'Roboto Mono';font-size:12.5px;line-height:1.65}
+  .bad .lbl,.paste .lbl{display:block;font-family:'Roboto Mono';font-size:10px;letter-spacing:.11em;text-transform:uppercase;margin-bottom:5px;font-weight:500}
+  .bad .lbl{color:#b91c1c}
+  .paste .lbl{color:#4ade80}
+
+  /* the dial callout */
+  .dial{background:linear-gradient(135deg,#2563eb,#1e3a8a);color:#fff;border-radius:20px;padding:30px 34px;text-align:center;max-width:900px;margin:0 auto}
+  .dial .eyebrow{color:#bfdbfe}
+  .dial h2{color:#fff;font-size:26px;margin:0 0 10px}
+  .dial p{font-size:17px;color:#e0ebff;margin:0 auto;max-width:760px;line-height:1.55}
+  .dial .split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:22px auto 0;max-width:720px;text-align:left}
+  .dial .half{background:rgba(255,255,255,.08);border:1px solid rgba(147,197,253,.28);border-radius:14px;padding:16px 18px}
+  .dial .half b{display:block;color:#fff;font-size:15px;margin-bottom:4px;font-family:'Montserrat';font-weight:700}
+  .dial .half span{font-size:14px;color:#cbd9f5;line-height:1.45}
+  @media(max-width:720px){.dial .split{grid-template-columns:1fr}}
+
+  /* caveats */
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .cav{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:0 2px 10px rgba(15,23,42,.04)}
+  .cav h3{margin:0 0 8px;font-size:15px;line-height:1.25}
+  .cav p{font-size:13.5px;color:var(--mut);margin:0;line-height:1.5}
+  .cav.warn{border-left:4px solid var(--amber)}
+  .cav.stop{border-left:4px solid var(--red)}
+  .cav.info{border-left:4px solid var(--blue)}
+  @media(max-width:860px){.grid3{grid-template-columns:1fr}}
+
+  /* fallback explainer */
+  .flow{display:flex;align-items:stretch;justify-content:center;flex-wrap:wrap;margin:8px 0 30px}
+  .flowstep{flex:1;min-width:190px;max-width:270px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px 18px;text-align:center;box-shadow:0 2px 10px rgba(15,23,42,.04)}
+  .flowstep b{display:block;font-family:'Montserrat';font-size:14.5px;color:var(--ink);margin-bottom:3px}
+  .flowstep span{font-size:12.5px;color:var(--mut);line-height:1.4}
+  .flowarr{display:flex;align-items:center;justify-content:center;color:var(--blue);font-size:24px;font-weight:700;padding:0 8px}
+  .qa{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:880px;margin:0 auto;text-align:left}
+  .qacard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:0 2px 10px rgba(15,23,42,.04)}
+  .qacard h4{margin:0 0 8px;font-family:'Montserrat';font-size:15.5px;color:var(--blued);display:flex;align-items:center;gap:9px}
+  .qacard .qn{flex:none;width:23px;height:23px;border-radius:6px;background:#dbeafe;color:#1e40af;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;font-family:'Roboto Mono'}
+  .qacard p{margin:0;font-size:14px;color:#334155;line-height:1.5}
+  .takeaway{background:linear-gradient(135deg,#2563eb,#1e3a8a);color:#fff;border-radius:16px;padding:20px 26px;text-align:center;max-width:880px;margin:26px auto 0;font-size:16px;line-height:1.55}
+  .takeaway b{color:#bfdbfe}
+  @media(max-width:760px){.qa{grid-template-columns:1fr}.flowarr{transform:rotate(90deg);padding:4px 0}}
+
+  /* footer */
+  .foot{padding:40px 0 60px;text-align:center;color:var(--mut);font-size:14px}
+  .receipt{display:inline-flex;align-items:center;gap:10px;background:var(--sky);border:1px solid #bfdbfe;border-radius:30px;padding:10px 20px;color:var(--blued);font-weight:600;font-size:14px;text-decoration:none}
+  .receipt b{font-family:'Montserrat'}
+  .srclist{max-width:840px;margin:22px auto 0;text-align:left;font-size:13px;color:var(--mut);line-height:1.7}
+  .srclist a{color:var(--blue);text-decoration:none}
+
+  @media(max-width:860px){.tips{grid-template-columns:1fr}.hero h1{font-size:33px}}
+</style>
+</head>
+
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="wrap">
+    <div class="tag">AIOS &middot; Khái niệm nền &middot; Giải thích kiểu Feynman</div>
+    <h1>10 khái niệm nền của AIOS</h1>
+    <p>Hiểu đúng 10 từ này, bạn sẽ làm việc với AI như quản lý một nhân viên thật — không còn thấy nó là "hộp đen" lúc hay lúc dở.</p>
+    <div class="one">AI là một nhân viên cực giỏi nhưng <b>mất trí nhớ hoàn toàn sau mỗi phiên làm việc</b> — mọi khái niệm còn lại trên trang này chỉ là cách cả cái xưởng vận hành quanh sự thật đó.</div>
+    <div class="heronote">Không cần biết code. Cả trang chỉ dùng một bức tranh: một cái xưởng, một nhân viên, và những tờ giấy.</div>
+  </div>
+</div>
+
+<!-- THE SHIFT -->
+<section>
+  <div class="wrap center">
+    <div class="eyebrow">Đổi cách nhìn</div>
+    <h2>AI không phải phép màu — nó là một xưởng có quy luật</h2>
+    <p class="sub">Ba dịch chuyển trong đầu, trước khi đi vào từng khái niệm.</p>
+    <div class="shift">
+      <div class="srow"><div class="sold">Nhắc AI bằng miệng, mai nó lại quên</div><div class="sarr">&rarr;</div><div class="snew">Ghi một lần vào giấy — nhớ vĩnh viễn</div></div>
+      <div class="srow"><div class="sold">AI như hộp đen, lúc giỏi lúc ngớ ngẩn khó hiểu</div><div class="sarr">&rarr;</div><div class="snew">AI như nhân viên mới: rất giỏi, nhưng chỉ biết những gì đang nằm trên bàn</div></div>
+      <div class="srow"><div class="sold">Càng nhiều tool, hệ càng mạnh</div><div class="sarr">&rarr;</div><div class="snew">Càng nhiều bài học được GHI lại, hệ càng mạnh</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TIP CARDS: 10 khái niệm -->
+<section class="alt">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow">Bộ từ vựng</div>
+      <h2>Mười khái niệm, mười hình ảnh</h2>
+      <p class="sub" style="margin-bottom:24px">Mỗi thẻ là một khái niệm bạn sẽ gặp hằng ngày khi xây hệ điều hành AI của mình.</p>
+    </div>
+    <div class="pnote"><b>Cách đọc:</b> ô đỏ là hiểu lầm thường gặp, ô tối màu là câu bạn có thể nói với AI của mình ngay hôm nay — thay chữ trong [ngoặc] bằng việc của bạn.</div>
+    <div class="tips">
+
+      <div class="tip">
+        <div class="tiphead"><span class="rk">1</span><div><h3>Context — mặt bàn làm việc</h3><div class="kicker">Trí nhớ trong phiên</div></div><span class="gtag univ">Cơ bản</span></div>
+        <p class="aha">AI chỉ "biết" đúng những gì đang bày trên mặt bàn lúc này: nội quy, thẻ công thức được rút ra, và cuộc trò chuyện từ đầu phiên. Bàn có diện tích giới hạn, và <b>hết phiên là bàn bị dọn sạch.</b></p>
+        <div class="ba">
+          <div class="bad"><span class="lbl">Hiểu lầm</span>"Hôm qua tôi dặn nó rồi mà?" — phiên mới là ngày đi làm đầu tiên; AI không nghe được hôm qua.</div>
+          <div class="paste"><span class="lbl">Nói với AI</span>Trước khi làm, đây là bối cảnh: mục tiêu [X], đã làm tới [Y], ràng buộc [Z].</div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <div class="tiphead"><span class="rk">2</span><div><h3>Token — tiền tệ của mặt bàn</h3><div class="kicker">Mọi chữ đều tính phí</div></div><span class="gtag univ">Cơ bản</span></div>
+        <p class="aha">Mọi chữ AI đọc vào hay viết ra đều được đếm bằng token và tốn tiền thật. <b>Đọc cả file dài khi chỉ cần một đoạn = bày giấy chiếm chỗ mặt bàn vô ích.</b></p>
+        <div class="ba">
+          <div class="bad"><span class="lbl">Hiểu lầm</span>Ném nguyên tài liệu 200 trang vào chat rồi hỏi một câu nhỏ — vừa tốn tiền vừa làm bàn chật.</div>
+          <div class="paste"><span class="lbl">Nói với AI</span>Chỉ đọc phần [chương 3] của file này thôi, đừng đọc cả file.</div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <div class="tiphead"><span class="rk">3</span><div><h3>Skill — thẻ công thức</h3><div class="kicker">Quy trình gọi 1 câu</div></div><span class="gtag univ">Cơ bản</span></div>
+        <p class="aha">Một skill là một thẻ công thức viết sẵn cho một món cụ thể: các bước, luật riêng, ví dụ mẫu. Gọi một câu là chạy đúng quy trình. <b>Nhiều thẻ cùng bộ đóng thành hộp thì gọi là plugin.</b></p>
+        <div class="ba">
+          <div class="bad"><span class="lbl">Hiểu lầm</span>Mỗi lần cần lại giải thích quy trình từ đầu trong chat, dài 20 dòng — và mỗi lần một khác.</div>
+          <div class="paste"><span class="lbl">Nói với AI</span>Biến quy trình [viết báo cáo tuần] thành một skill, để lần sau tôi gọi 1 câu là chạy.</div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <div class="tiphead"><span class="rk">4</span><div><h3>CLAUDE.md — nội quy trên tường</h3><div class="kicker">Luật áp cho mọi việc</div></div><span class="gtag univ">Cơ bản</span></div>
+        <p class="aha">Tờ giấy AI đọc đầu MỌI phiên, trước mọi việc: xưng hô, ngôn ngữ, các luật cứng. Quy tắc chọn chỗ ghi: <b>sai ở một món → sửa thẻ công thức; sai ở mọi món → sửa nội quy tường.</b></p>
+        <div class="ba">
+          <div class="bad"><span class="lbl">Hiểu lầm</span>Ghi cả quy trình chi tiết của từng việc lên tường — tường chật, luật quan trọng bị loãng.</div>
+          <div class="paste"><span class="lbl">Nói với AI</span>Từ giờ, mỗi khi [giao việc cho team] thì phải [kiểm lịch nghỉ người nhận] — ghi vào CLAUDE.md.</div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <div class="tiphead"><span class="rk">5</span><div><h3>Hook — chuông gắn cửa</h3><div class="kicker">Tự chạy khi có sự kiện</div></div><span class="gtag univ">Cơ bản</span></div>
+        <p class="aha">Hành động tự chạy KHI một sự kiện xảy ra — cửa mở là chuông reo, do máy đảm bảo 100%, không phụ thuộc AI "nhớ". <b>Việc theo sự kiện → hook; việc theo giờ giấc → lịch trực (cadence); việc gọi tên → skill.</b></p>
+        <div class="ba">
+          <div class="bad"><span class="lbl">Hiểu lầm</span>Dặn trong chat "nhớ tự động làm X mỗi khi Y nhé" — lời dặn không sống qua đêm, chuông thì có.</div>
+          <div class="paste"><span class="lbl">Nói với AI</span>Mỗi khi [tôi kết thúc phiên], tự động [chạy tổng kết] — cài hook giúp tôi.</div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <div class="tiphead"><span class="rk">6</span><div><h3>Agent — thợ phụ có bàn riêng</h3><div class="kicker">Chia việc không ngập bàn</div></div><span class="gtag fable">Đòn bẩy</span></div>
+        <p class="aha">Nhân viên chính thuê được thợ phụ, mỗi thợ có mặt bàn RIÊNG trống trơn — giao đọc 50 file, nó chỉ mang về một tờ kết luận, bàn chính không ngập. Nhưng nó không nghe được cuộc trò chuyện của bạn: <b>brief thiếu là nó chế bừa.</b></p>
+        <div class="ba">
+          <div class="bad"><span class="lbl">Hiểu lầm</span>"Cho agent tự tìm hiểu đi" — không đưa bối cảnh, nhận về kết quả lạc đề mà nghe rất tự tin.</div>
+          <div class="paste"><span class="lbl">Nói với AI</span>Cho thợ phụ đọc [50 file này], brief kèm [định nghĩa X], chỉ mang về [bảng kết luận].</div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <div class="tiphead"><span class="rk">7</span><div><h3>Model — các hạng thợ</h3><div class="kicker">Chọn hạng theo độ rủi ro</div></div><span class="gtag fable">Đòn bẩy</span></div>
+        <p class="aha">Không phải một AI, mà là công ty cho thuê thợ nhiều hạng: thợ quét nhanh-rẻ, thợ xây lành nghề, kiến trúc sư đắt-sâu. <b>Việc quét đừng thuê kiến trúc sư; quyết định lớn đừng giao thợ quét.</b></p>
+        <div class="ba">
+          <div class="bad"><span class="lbl">Hiểu lầm</span>Dùng model đắt nhất cho mọi việc "cho chắc" — hoặc model rẻ nhất cho việc rủi ro cao.</div>
+          <div class="paste"><span class="lbl">Nói với AI</span>Việc này [chỉ quét dữ liệu, rủi ro thấp] — dùng model rẻ thôi.</div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <div class="tiphead"><span class="rk">8</span><div><h3>CLI &middot; API &middot; MCP — ba loại dây nối</h3><div class="kicker">Nối ra dịch vụ ngoài</div></div><span class="gtag univ">Cơ bản</span></div>
+        <p class="aha">Muốn AI đụng được Gmail, Notion, lịch… phải có "dây": CLI = công cụ sẵn trong xưởng; API = gọi thẳng tổng đài dịch vụ; MCP = ổ cắm đa năng qua trung gian. <b>Đường trực tiếp trước, trung gian sau cùng</b> — càng ít tầng càng ít chỗ hỏng.</p>
+        <div class="ba">
+          <div class="bad"><span class="lbl">Hiểu lầm</span>Cứ thấy dịch vụ mới là cài MCP, trong khi CLI/API chính thức đã nằm sẵn trong xưởng.</div>
+          <div class="paste"><span class="lbl">Nói với AI</span>Kiểm tra có CLI hay API chính thức chưa, rồi hẵng tính đến MCP.</div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <div class="tiphead"><span class="rk">9</span><div><h3>Git — cỗ máy thời gian</h3><div class="kicker">Mọi thứ đảo ngược được</div></div><span class="gtag fable">Đòn bẩy</span></div>
+        <p class="aha">Mỗi lần "commit" là chụp một tấm ảnh toàn bộ xưởng, lưu vĩnh viễn — sửa hỏng thì quay về tấm gần nhất. <b>Đây là lý do dám cho AI sửa mạnh tay: trong vùng phủ của máy thời gian, không gì mất thật.</b></p>
+        <div class="ba">
+          <div class="bad"><span class="lbl">Hiểu lầm</span>Sợ AI làm hỏng nên không dám cho sửa gì — hoặc ngược lại: cho sửa thứ NGOÀI vùng git mà không sao lưu.</div>
+          <div class="paste"><span class="lbl">Nói với AI</span>Commit trước đã, rồi hãy sửa lớn — để còn quay lại được.</div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <div class="tiphead"><span class="rk">10</span><div><h3>Spec — tờ đề bài</h3><div class="kicker">Chốt đề trước khi làm</div></div><span class="gtag fable">Đòn bẩy</span></div>
+        <p class="aha">Đề bài viết ra TRƯỚC khi động tay: đích là gì, ràng buộc gì, thế nào là đạt. Vòng làm việc chuẩn với AI: <b>ra đề → làm → chấm theo đề → chưa đạt thì làm lại.</b> Không có đề = "làm cho tốt nhé" = sửa 10 lần.</p>
+        <div class="ba">
+          <div class="bad"><span class="lbl">Hiểu lầm</span>"Làm cho tôi cái dashboard đẹp đẹp" — không ai đo được thế nào là xong, kể cả bạn.</div>
+          <div class="paste"><span class="lbl">Nói với AI</span>Trước khi làm, chốt giúp tôi: đích [X], ràng buộc [Y], coi là ĐẠT khi [Z đo được].</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- THE DIAL -->
+<section class="center">
+  <div class="wrap">
+    <div class="dial">
+      <div class="eyebrow">Nút vặn quan trọng nhất</div>
+      <h2>Hai loại trí nhớ — đừng lẫn</h2>
+      <p>Hầu hết các rắc rối "sao AI quên hoài" đều quy về việc lẫn hai loại trí nhớ này với nhau.</p>
+      <div class="split">
+        <div class="half"><b>Mặt bàn (context)</b><span>Trí nhớ TRONG một phiên. Nhanh, đầy đủ, nhưng bị dọn sạch khi phiên kết thúc. Đừng gửi gắm điều quan trọng ở đây rồi trách nó quên.</span></div>
+        <div class="half"><b>Tờ giấy (file)</b><span>Trí nhớ QUA đêm, vĩnh viễn: nội quy tường, thẻ công thức, sổ bài học. Muốn AI "nhớ" điều gì — điều đó phải nằm ở đây trước khi hết phiên.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAVEATS -->
+<section class="alt">
+  <div class="wrap">
+    <div class="eyebrow">Nói thật</div>
+    <h2>Ba lưu ý thành thật</h2>
+    <p class="sub" style="margin-bottom:26px">Ba chỗ người mới hay vấp nhất khi bắt đầu xây hệ của mình.</p>
+    <div class="grid3">
+      <div class="cav warn"><h3>Tường chỉ chứa được có hạn</h3><p>Nội quy luôn-bật chiếm chỗ mặt bàn ở MỌI phiên. Ghi bừa mọi thứ lên tường thì luật quan trọng bị loãng. Chỉ đưa lên tường thứ đã lặp lại và áp cho mọi việc.</p></div>
+      <div class="cav stop"><h3>AI không tự học sau lưng bạn</h3><p>Không có chuyện "dùng lâu nó tự hiểu mình". Không ghi = không học. Nhắc miệng mà không ghi vào giấy thì ngày mai nó sai lại đúng chỗ cũ — mãi mãi.</p></div>
+      <div class="cav info"><h3>Lỗi 1 lần chưa phải bài học</h3><p>Một lần có thể là ngẫu nhiên; lặp lần thứ 2 mới là thói quen đáng ghi thành luật. Trước ngưỡng đó, cứ để bài học nằm ở sổ nháp.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- DEEP-DIVE: vòng nâng cấp -->
+<section>
+  <div class="wrap center">
+    <div class="eyebrow">Đào sâu</div>
+    <h2>Vòng nâng cấp — cách duy nhất AI thật sự "học"</h2>
+    <p class="sub" style="margin-bottom:22px">Học = thay đổi hành vi. Với AI, hành vi chỉ đổi khi tờ giấy đổi — và đây là vòng làm cho tờ giấy tốt lên mỗi tuần.</p>
+    <div class="flow">
+      <div class="flowstep"><b>1. Thấy sai → nói ra</b><span>Mất 5 giây. Lỗi không được nói ra thì không bao giờ thành bài học.</span></div>
+      <div class="flowarr">&rarr;</div>
+      <div class="flowstep"><b>2. Cuối phiên → chắt vào sổ nháp</b><span>AI tự gom những gì bạn đã chỉnh trong phiên thành bài học.</span></div>
+      <div class="flowarr">&rarr;</div>
+      <div class="flowstep"><b>3. Lặp ≥2 lần → duyệt, ghi vào giấy</b><span>Sai một món → sửa thẻ công thức. Sai mọi món → sửa nội quy tường.</span></div>
+    </div>
+    <div class="qa">
+      <div class="qacard"><h4><span class="qn">1</span>Sao không ghi thẳng thành luật ngay lần đầu?</h4><p>Vì tường có hạn và lỗi một lần có thể là ngẫu nhiên. Sổ nháp là bộ lọc: cái gì lặp lại mới xứng đáng chiếm chỗ mặt bàn mỗi sáng.</p></div>
+      <div class="qacard"><h4><span class="qn">2</span>Sửa skill hay sửa CLAUDE.md — chọn thế nào?</h4><p>Hỏi một câu: lỗi này xảy ra ở MỘT món hay MỌI món? Một món → sửa thẻ công thức của món đó. Mọi món → nội quy tường. Còn sự thật về bạn/dự án (không phải cách làm) → sổ memory.</p></div>
+      <div class="qacard"><h4><span class="qn">3</span>Vai trò của tôi trong vòng này là gì?</h4><p>Đúng hai việc: nói ra khi thấy sai (5 giây) và gật/lắc khi AI trình bảng đề xuất (30 giây). Phần ghi chép, tìm pattern lặp, sửa đúng tờ giấy — là việc của máy.</p></div>
+      <div class="qacard"><h4><span class="qn">4</span>Vì sao đây là tài sản khó copy nhất?</h4><p>Con AI thì ai cũng thuê được — nhưng xấp giấy bài học chắt từ chính công việc của bạn thì không ai có. Mỗi bài học ghi một lần là vĩnh viễn: hệ tốt lên theo lãi kép.</p></div>
+    </div>
+    <div class="takeaway">AI của bạn đã đủ thông minh từ ngày đầu. <b>Thứ compound theo thời gian là xấp giấy bài học — và nó chỉ dày lên khi bạn chịu nói ra lúc AI làm sai.</b></div>
+    <p style="font-family:'Roboto Mono';font-size:11px;color:#94a3b8;margin:16px 0 0;letter-spacing:.02em">Chắt từ phiên hỏi-đáp kiểu Feynman, 07/2026 — Trần Mạnh Đức &times; Claude.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="foot">
+  <a class="receipt" href="https://ai.metta.vn">Một trang trong bộ tài liệu AIOS của <b>Metta Life</b></a>
+  <div class="srclist">
+    <b>Nguồn chính:</b><br>
+    &middot; Khung 4C của AIOS: Context &middot; Connections &middot; Capabilities &middot; Cadence (Nate Herk)<br>
+    &middot; <a href="https://code.claude.com/docs">Tài liệu Claude Code</a> — skills, hooks, subagents, memory<br>
+    <b>Ghi chú phương pháp:</b> toàn bộ ẩn dụ (nhân viên mất trí nhớ, mặt bàn, tờ giấy, chuông cửa, máy thời gian) được chốt qua một phiên hỏi-đáp kiểu Feynman thật giữa Trần Mạnh Đức và Claude, tháng 07/2026 — sau đó mới đóng thành trang này.
+  </div>
+</div>
+
+</body>
+</html>
